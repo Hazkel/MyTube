@@ -1,8 +1,15 @@
 const API_KEY = "AIzaSyCnBJYr7M-PYbSTh04JxF-1SyOwRovaRAQ";
 
+const IS_CAPACITOR =
+  Boolean(window.Capacitor) &&
+  typeof window.Capacitor.isNativePlatform === "function" &&
+  window.Capacitor.isNativePlatform();
+
 const DIRECT_FILE_MODE =
   window.location.protocol === "file:" ||
-  window.location.hostname.endsWith(".github.io");
+  window.location.hostname.endsWith(".github.io") ||
+  IS_CAPACITOR;
+
 const API_URL = DIRECT_FILE_MODE
   ? "https://www.googleapis.com/youtube/v3/search"
   : "/api/search";
@@ -128,7 +135,8 @@ function createVideoCard(video) {
 
   const description = document.createElement("p");
   description.className = "video-description";
-  description.textContent = video.description || "Tidak ada deskripsi video.";
+  description.textContent =
+    video.description || "Tidak ada deskripsi video.";
 
   thumbnailWrap.append(thumbnail);
   details.append(title, channel, description);
@@ -204,9 +212,13 @@ async function searchVideos({ append = false } = {}) {
   }
 
   try {
-    const response = await fetch(`${API_URL}?${parameters.toString()}`, options);
+    const response = await fetch(
+      `${API_URL}?${parameters.toString()}`,
+      options
+    );
 
     let data;
+
     try {
       data = await response.json();
     } catch {
@@ -253,7 +265,7 @@ async function searchVideos({ append = false } = {}) {
     if (thisRequest === requestNumber) {
       const message =
         error instanceof TypeError && DIRECT_FILE_MODE
-          ? "Browser gagal menghubungi YouTube. Periksa koneksi internet, API key, dan pembatasan API key di Google Cloud Console."
+          ? "Gagal menghubungi YouTube. Periksa koneksi internet, API key, dan batasan API key di Google Cloud Console."
           : error.message || "Tidak dapat menghubungi server.";
 
       setStatus(message, "error");
