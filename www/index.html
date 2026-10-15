@@ -7,6 +7,10 @@
   <meta name="description" content="Cari dan temukan video YouTube dengan MyTube.">
   <title>MyTube — Pencarian Video</title>
 
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
   <script>
     try {
       const savedTheme = localStorage.getItem("mytube-theme");
@@ -24,7 +28,13 @@
 <body>
   <header class="site-header">
     <a class="brand" href="./" aria-label="MyTube beranda">
-      <span class="brand-mark" aria-hidden="true">M</span>
+      <img
+        class="brand-mark"
+        src="icon-192.png"
+        alt=""
+        width="30"
+        height="30"
+      >
       <span class="brand-name">MyTube</span>
     </a>
 
@@ -65,6 +75,62 @@
         </button>
       </form>
       <p class="search-hint">Tekan Enter untuk mencari</p>
+    </section>
+
+    <section class="results-section photo-gallery" aria-labelledby="photos-heading" hidden>
+      <div class="results-header">
+        <h2 id="photos-heading">Foto pilihan</h2>
+      </div>
+
+      <div class="results-grid">
+        <article class="video-card photo-card" hidden>
+          <div class="video-thumbnail-wrap">
+            <img
+              class="video-thumbnail"
+              src="pictures/photo-1.jpg"
+              alt="Foto pilihan 1"
+              loading="eager"
+              onload="this.closest('.photo-gallery').hidden = false"
+              onerror="this.closest('.photo-card').hidden = true"
+            >
+          </div>
+          <div class="video-details">
+            <h3 class="video-title">Foto pilihan 1</h3>
+          </div>
+        </article>
+
+        <article class="video-card photo-card" hidden>
+          <div class="video-thumbnail-wrap">
+            <img
+              class="video-thumbnail"
+              src="pictures/photo-2.jpg"
+              alt="Foto pilihan 2"
+              loading="eager"
+              onload="this.closest('.photo-gallery').hidden = false"
+              onerror="this.closest('.photo-card').hidden = true"
+            >
+          </div>
+          <div class="video-details">
+            <h3 class="video-title">Foto pilihan 2</h3>
+          </div>
+        </article>
+
+        <article class="video-card photo-card" hidden>
+          <div class="video-thumbnail-wrap">
+            <img
+              class="video-thumbnail"
+              src="pictures/photo-3.jpg"
+              alt="Foto pilihan 3"
+              loading="eager"
+              onload="this.closest('.photo-gallery').hidden = false"
+              onerror="this.closest('.photo-card').hidden = true"
+            >
+          </div>
+          <div class="video-details">
+            <h3 class="video-title">Foto pilihan 3</h3>
+          </div>
+        </article>
+      </div>
     </section>
 
     <section class="results-section" aria-labelledby="results-heading">

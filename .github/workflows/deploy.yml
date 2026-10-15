@@ -39,6 +39,49 @@ jobs:
       - name: Add Android platform
         run: npx cap add android
 
+      - name: Install Android launcher icons
+        shell: bash
+        run: |
+          for density in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
+            source_dir="picture/android/res/mipmap-${density}"
+            target_dir="android/app/src/main/res/mipmap-${density}"
+
+            mkdir -p "$target_dir"
+
+            cp "$source_dir/MyTube.png" \
+              "$target_dir/ic_launcher.png"
+            cp "$source_dir/MyTube.png" \
+              "$target_dir/ic_launcher_round.png"
+
+            cp "$source_dir/MyTube_background.png" "$target_dir/"
+            cp "$source_dir/MyTube_foreground.png" "$target_dir/"
+            cp "$source_dir/MyTube_monochrome.png" "$target_dir/"
+          done
+
+          adaptive_source="picture/android/res/mipmap-anydpi-v26"
+          adaptive_target="android/app/src/main/res/mipmap-anydpi-v26"
+          mkdir -p "$adaptive_target"
+
+          cp "$adaptive_source/MyTube.xml" \
+            "$adaptive_target/ic_launcher.xml"
+          cp "$adaptive_source/MyTube.xml" \
+            "$adaptive_target/ic_launcher_round.xml"
+
+      - name: Copy web icons and optional photos
+        shell: bash
+        run: |
+          cp picture/web/favicon.ico www/favicon.ico
+          cp picture/web/apple-touch-icon.png www/apple-touch-icon.png
+          cp picture/web/icon-192.png www/icon-192.png
+          cp picture/web/icon-192-maskable.png www/icon-192-maskable.png
+          cp picture/web/icon-512.png www/icon-512.png
+          cp picture/web/icon-512-maskable.png www/icon-512-maskable.png
+
+          if [ -d "picture/photos" ]; then
+            mkdir -p www/pictures
+            cp -R picture/photos/. www/pictures/
+          fi
+
       - name: Sync web app to Android
         run: npx cap sync android
 
