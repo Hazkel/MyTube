@@ -42,34 +42,41 @@ jobs:
       - name: Install Android launcher icons
         shell: bash
         run: |
+          set -euo pipefail
+
           for density in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
             source_dir="picture/android/res/mipmap-${density}"
             target_dir="android/app/src/main/res/mipmap-${density}"
 
             mkdir -p "$target_dir"
 
-            cp "$source_dir/MyTube.png" \
-              "$target_dir/ic_launcher.png"
-            cp "$source_dir/MyTube.png" \
-              "$target_dir/ic_launcher_round.png"
+            cp "$source_dir/MyTube.png" "$target_dir/ic_launcher.png"
+            cp "$source_dir/MyTube.png" "$target_dir/ic_launcher_round.png"
 
-            cp "$source_dir/MyTube_background.png" "$target_dir/"
-            cp "$source_dir/MyTube_foreground.png" "$target_dir/"
-            cp "$source_dir/MyTube_monochrome.png" "$target_dir/"
+            cp "$source_dir/MyTube_background.png" "$target_dir/mytube_background.png"
+            cp "$source_dir/MyTube_foreground.png" "$target_dir/mytube_foreground.png"
+            cp "$source_dir/MyTube_monochrome.png" "$target_dir/mytube_monochrome.png"
           done
 
-          adaptive_source="picture/android/res/mipmap-anydpi-v26"
           adaptive_target="android/app/src/main/res/mipmap-anydpi-v26"
           mkdir -p "$adaptive_target"
 
-          cp "$adaptive_source/MyTube.xml" \
-            "$adaptive_target/ic_launcher.xml"
-          cp "$adaptive_source/MyTube.xml" \
-            "$adaptive_target/ic_launcher_round.xml"
+          cat > "$adaptive_target/ic_launcher.xml" <<'EOF'
+          <?xml version="1.0" encoding="utf-8"?>
+          <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+            <background android:drawable="@mipmap/mytube_background" />
+            <foreground android:drawable="@mipmap/mytube_foreground" />
+            <monochrome android:drawable="@mipmap/mytube_monochrome" />
+          </adaptive-icon>
+          EOF
+
+          cp "$adaptive_target/ic_launcher.xml" "$adaptive_target/ic_launcher_round.xml"
 
       - name: Copy web icons and optional photos
         shell: bash
         run: |
+          set -euo pipefail
+
           cp picture/web/favicon.ico www/favicon.ico
           cp picture/web/apple-touch-icon.png www/apple-touch-icon.png
           cp picture/web/icon-192.png www/icon-192.png
